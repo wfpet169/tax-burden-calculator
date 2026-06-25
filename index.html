@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>带货主播算税助手</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./src/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar">
+        <h1>带货主播算税助手</h1>
+        <p class="lede">按同一笔带货服务营收，对比有限公司、个体工商户、自然人主播三种身份的税费和测算到手金额。</p>
+
+        <form id="calculator-form">
+          <fieldset class="field-group">
+            <legend>经营数据</legend>
+            <label class="field">
+              年营收
+              <input name="annualRevenue" type="number" min="0" step="1000">
+            </label>
+            <label class="field">
+              其他成本/费用
+              <input name="deductibleCost" type="number" min="0" step="1000">
+            </label>
+            <label class="field">
+              广告/推广费
+              <input name="promotionFee" type="number" min="0" step="1000">
+            </label>
+            <label class="field">
+              一般纳税人可抵扣进项税
+              <input name="inputVat" type="number" min="0" step="100">
+            </label>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>增值税与附加</legend>
+            <label class="field">
+              城建税地区
+              <select name="cityConstructionRate">
+                <option value="0.07">市区 7%</option>
+                <option value="0.05">县城/镇 5%</option>
+                <option value="0.01">其他地区 1%</option>
+              </select>
+            </label>
+            <label class="field">
+              有限公司增值税身份
+              <select name="companyVatMode">
+                <option value="smallScale">小规模纳税人</option>
+                <option value="general">一般纳税人服务 6%</option>
+              </select>
+            </label>
+            <label class="field">
+              个体户增值税身份
+              <select name="individualBusinessVatMode">
+                <option value="smallScale">小规模纳税人</option>
+                <option value="general">一般纳税人服务 6%</option>
+              </select>
+            </label>
+            <label class="field">
+              自然人增值税口径
+              <select name="naturalPersonVatMode">
+                <option value="smallScale">小规模/代开发票口径</option>
+                <option value="general">按服务 6% 压力测试</option>
+              </select>
+            </label>
+            <label class="check">
+              <input name="applySixTaxesTwoFeesReduction" type="checkbox">
+              适用六税两费减半
+            </label>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>个税扣除</legend>
+            <div class="grid-2">
+              <label class="field">
+                基本减除费用
+                <input name="annualBasicDeduction" type="number" min="0" step="1000">
+              </label>
+              <label class="field">
+                专项扣除
+                <input name="annualSpecialDeductions" type="number" min="0" step="1000">
+              </label>
+              <label class="field">
+                专项附加扣除
+                <input name="annualAdditionalDeductions" type="number" min="0" step="1000">
+              </label>
+              <label class="field">
+                其他扣除
+                <input name="annualOtherDeductions" type="number" min="0" step="1000">
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>身份优惠</legend>
+            <label class="check">
+              <input name="companySmallLowProfitEligible" type="checkbox">
+              有限公司符合小型微利企业条件
+            </label>
+            <label class="check">
+              <input name="companyDistributeDividend" type="checkbox">
+              公司税后利润分红到个人
+            </label>
+            <label class="check">
+              <input name="applyIndividualBusinessRelief" type="checkbox">
+              个体户经营所得不超 200 万部分减半
+            </label>
+          </fieldset>
+
+          <div class="actions">
+            <button type="button" id="reset-defaults" class="secondary">恢复默认</button>
+          </div>
+        </form>
+      </aside>
+
+      <section class="content">
+        <div class="topline">
+          <div>
+            <h2>测算结果</h2>
+            <p class="muted">所有金额为年度估算。改变左侧参数会立即重算。</p>
+          </div>
+          <div class="rule-pill">
+            <span>规则版本</span>
+            <strong id="rule-version">读取中...</strong>
+            <span id="effective-period"></span>
+          </div>
+        </div>
+
+        <div id="recommendation" class="recommendation"></div>
+        <div id="cards" class="cards"></div>
+
+        <section class="panel">
+          <h2>广告/推广费扣除口径对比</h2>
+          <p class="muted">同一笔广告/推广费，同时展示“全额税前扣除”和“按当年营收 15% 限额扣除”两种结果。</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>身份</th>
+                  <th class="number">全额扣除税费</th>
+                  <th class="number">15%限额税费</th>
+                  <th class="number">全额到手</th>
+                  <th class="number">15%口径到手</th>
+                  <th class="number">税费差额</th>
+                </tr>
+              </thead>
+              <tbody id="deduction-comparison"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>税费拆分</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>身份</th>
+                  <th>税种</th>
+                  <th class="number">金额</th>
+                </tr>
+              </thead>
+              <tbody id="detail-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>计算规则</h2>
+          <p class="muted">以下公式与当前规则文件一致，便于按税种逐项核查。</p>
+          <div id="calc-rules" class="rule-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>当前假设</h2>
+          <ul id="assumptions" class="assumption-list"></ul>
+        </section>
+
+        <section class="panel">
+          <h2>规则更新</h2>
+          <p class="muted">后续法律法规调整时，只需替换或导入同结构 JSON 规则文件；部署到服务器后也可以把规则文件指向远程地址。</p>
+          <div class="update-row">
+            <button type="button" id="check-update">重新读取规则</button>
+            <label class="file-button">
+              导入规则 JSON
+              <input id="rules-import" type="file" accept="application/json,.json">
+            </label>
+            <span id="update-status">等待操作</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>官方来源</h2>
+          <ul id="sources" class="source-list"></ul>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

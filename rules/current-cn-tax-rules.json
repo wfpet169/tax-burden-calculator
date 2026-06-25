@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "ruleVersion": "CN-MAINLAND-LIVE-COMMERCE-2026-06-24",
+  "jurisdiction": "中国大陆",
+  "currency": "CNY",
+  "effectiveFrom": "2026-01-01",
+  "effectiveTo": "2027-12-31",
+  "scopeNote": "用于带货主播服务收入在有限公司、个体工商户、自然人劳务报酬三种身份下的税负测算。核定征收、地方特殊政策、社保基数、平台代扣预缴差异、具体税目认定需另行确认。",
+  "sources": [
+    {
+      "title": "中华人民共和国增值税法",
+      "url": "https://shanghai.chinatax.gov.cn/zcfw/zcfgk/zzs/202412/t474694.html",
+      "usedFor": "增值税一般计税、6%服务税率、小规模纳税人定义、简易计税3%征收率"
+    },
+    {
+      "title": "财政部 税务总局公告2026年第10号",
+      "url": "https://fgk.chinatax.gov.cn/zcfgk/c102416/c5247434/content.html",
+      "usedFor": "2026-2027小规模纳税人起征点及3%减按1%征收率衔接政策"
+    },
+    {
+      "title": "财政部 税务总局公告2023年第12号",
+      "url": "https://fgk.chinatax.gov.cn/zcfgk/c102416/c5210453/content.html",
+      "usedFor": "个体工商户经营所得减半、六税两费减半、小型微利企业所得税优惠"
+    },
+    {
+      "title": "中华人民共和国个人所得税法",
+      "url": "https://fgk.chinatax.gov.cn/zcfgk/c100009/c5193028/content.html",
+      "usedFor": "综合所得、经营所得、股息红利所得分类和税率"
+    },
+    {
+      "title": "中华人民共和国企业所得税法",
+      "url": "https://fgk.chinatax.gov.cn/zcfgk/c100009/c5193018/content.html",
+      "usedFor": "企业所得税25%法定税率和应纳税所得额基础口径"
+    },
+    {
+      "title": "中华人民共和国企业所得税法实施条例",
+      "url": "https://fgk.chinatax.gov.cn/zcfgk/c100010/c5194417/content.html",
+      "usedFor": "广告费和业务宣传费按当年销售营业收入15%限额扣除"
+    },
+    {
+      "title": "个体工商户个人所得税计税办法",
+      "url": "https://fgk.chinatax.gov.cn/zcfgk/c100011/c5195230/content.html",
+      "usedFor": "个体工商户广告费和业务宣传费15%限额扣除"
+    }
+  ],
+  "deductions": {
+    "advertisingAndPromotion": {
+      "currentYearLimitRatio": 0.15,
+      "carryForwardAllowed": true,
+      "base": "平台报送年营收"
+    }
+  },
+  "vat": {
+    "smallScaleEligibilityAnnualSales": 5000000,
+    "smallScale": {
+      "monthlyThreshold": 100000,
+      "quarterlyThreshold": 300000,
+      "annualThreshold": 1200000,
+      "statutoryLevyRate": 0.03,
+      "reducedLevyRate": 0.01,
+      "reducedRateEffectiveTo": "2027-12-31"
+    },
+    "generalServiceRate": 0.06
+  },
+  "surcharges": {
+    "cityConstructionRates": [
+      { "label": "市区 7%", "value": 0.07 },
+      { "label": "县城/镇 5%", "value": 0.05 },
+      { "label": "其他地区 1%", "value": 0.01 }
+    ],
+    "educationSurchargeRate": 0.03,
+    "localEducationSurchargeRate": 0.02,
+    "sixTaxesTwoFeesReduction": 0.5,
+    "sixTaxesTwoFeesEffectiveTo": "2027-12-31"
+  },
+  "enterpriseIncomeTax": {
+    "standardRate": 0.25,
+    "smallLowProfit": {
+      "maxTaxableIncome": 3000000,
+      "maxEmployees": 300,
+      "maxAssets": 50000000,
+      "includedTaxableIncomeRatio": 0.25,
+      "rate": 0.2,
+      "effectiveRate": 0.05,
+      "effectiveTo": "2027-12-31"
+    }
+  },
+  "individualIncomeTax": {
+    "annualBasicDeduction": 60000,
+    "laborRemunerationIncomeRatio": 0.8,
+    "dividendRate": 0.2,
+    "comprehensiveBrackets": [
+      { "upTo": 36000, "rate": 0.03, "quickDeduction": 0 },
+      { "upTo": 144000, "rate": 0.1, "quickDeduction": 2520 },
+      { "upTo": 300000, "rate": 0.2, "quickDeduction": 16920 },
+      { "upTo": 420000, "rate": 0.25, "quickDeduction": 31920 },
+      { "upTo": 660000, "rate": 0.3, "quickDeduction": 52920 },
+      { "upTo": 960000, "rate": 0.35, "quickDeduction": 85920 },
+      { "upTo": null, "rate": 0.45, "quickDeduction": 181920 }
+    ],
+    "businessBrackets": [
+      { "upTo": 30000, "rate": 0.05, "quickDeduction": 0 },
+      { "upTo": 90000, "rate": 0.1, "quickDeduction": 1500 },
+      { "upTo": 300000, "rate": 0.2, "quickDeduction": 10500 },
+      { "upTo": 500000, "rate": 0.3, "quickDeduction": 40500 },
+      { "upTo": null, "rate": 0.35, "quickDeduction": 65500 }
+    ],
+    "individualBusinessRelief": {
+      "maxTaxableIncome": 2000000,
+      "reductionRate": 0.5,
+      "effectiveTo": "2027-12-31"
+    }
+  },
+  "defaults": {
+    "annualRevenue": 1000000,
+    "deductibleCost": 200000,
+    "promotionFee": 0,
+    "inputVat": 0,
+    "taxIncluded": false,
+    "cityConstructionRate": 0.07,
+    "annualBasicDeduction": 60000,
+    "annualSpecialDeductions": 0,
+    "annualAdditionalDeductions": 0,
+    "annualOtherDeductions": 0,
+    "companyVatMode": "smallScale",
+    "individualBusinessVatMode": "smallScale",
+    "naturalPersonVatMode": "smallScale",
+    "companySmallLowProfitEligible": true,
+    "companyDistributeDividend": true,
+    "applySixTaxesTwoFeesReduction": true,
+    "applyIndividualBusinessRelief": true
+  }
+}
